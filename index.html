@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time RAM Monitor</title>
+</head>
+<body>
+    <h3>Real-Time RAM Data</h3>
+    <p id="total-ram">Total RAM: Loading...</p>
+    <p id="free-ram">Free RAM: Loading...</p>
+    <p id="used-ram">Used RAM: Loading...</p>
+
+    <script>
+        const ws = new WebSocket('ws://localhost:8080');
+
+        ws.onmessage = function (event) {
+            const ramData = JSON.parse(event.data);
+            document.getElementById('total-ram').textContent = `Total RAM: ${ramData.total} GB`;
+            document.getElementById('free-ram').textContent = `Free RAM: ${ramData.free} GB`;
+            document.getElementById('used-ram').textContent = `Used RAM: ${ramData.used} GB`;
+        };
+
+        ws.onclose = function () {
+            console.log('Connection closed');
+        };
+    </script>
+</body>
+</html>
